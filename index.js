@@ -188,9 +188,6 @@ run().catch(console.dir);
 app.get('/', (req, res) => {
   res.send('FinEase API Running ');
 });
-
-
-// REPORTS 
 app.get("/reports", async (req, res) => {
   try {
     const transactions = await transactionsCollection.find().toArray();
