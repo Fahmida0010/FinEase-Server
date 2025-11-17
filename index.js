@@ -265,8 +265,6 @@ app.get("/summary", async (req, res) => {
 });
 
 
-
-// Start server
 app.listen(PORT, () => {
   console.log(`FinEase Server running on port ${PORT} 🌟`);
 });
