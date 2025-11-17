@@ -128,7 +128,6 @@ async function run() {
         res.status(500).send({ success: false, message: "Server Error" });
       }
     });
-    // UPDATE a transaction
     app.put("/transactions/:id", async (req, res) => {
       const id = req.params.id;
       const updatedData = req.body;
