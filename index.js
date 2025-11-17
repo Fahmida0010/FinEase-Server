@@ -191,8 +191,6 @@ app.get('/', (req, res) => {
 app.get("/reports", async (req, res) => {
   try {
     const transactions = await transactionsCollection.find().toArray();
-
-    // Category Distribution
     const categoryDistribution = transactions.reduce((acc, item) => {
       const found = acc.find((c) => c.category === item.category);
       if (found) {
