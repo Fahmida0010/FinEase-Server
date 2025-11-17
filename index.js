@@ -26,6 +26,7 @@ async function run() {
     await client.connect();
     db = client.db('FinEase');
     transactionsCollection = db.collection('transactions');
+
     app.post("/signup", async (req, res) => {
       try {
         const { name, email, password } = req.body;
@@ -82,7 +83,9 @@ async function run() {
       }
     });
 
-    app.get('/my-transactions/:email', async (req, res) => {
+    // my transaction
+
+    app.get('/transactions/:email', async (req, res) => {
       try {
         const email = req.params.email;
         const { sortBy = "date", sortOrder = "desc" } = req.query;
