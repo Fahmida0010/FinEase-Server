@@ -203,8 +203,6 @@ app.get("/reports", async (req, res) => {
       }
       return acc;
     }, []);
-
-    // Monthly Totals
     const monthlyTotals = transactions.reduce((acc, item) => {
       if (!item.createdAt) return acc;
 
