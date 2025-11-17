@@ -160,7 +160,6 @@ async function run() {
         res.status(500).send({ error: "Server error" });
       }
     });
-    // delete transaction
     app.delete("/my-transactions/:id", async (req, res) => {
       try {
         const id = req.params.id;
