@@ -88,7 +88,6 @@ async function run() {
 
         if (!email) return res.status(400).json({ message: "Email is required" });
 
-        // Sorting logic
         let sortOption = {};
         if (sortBy === "date") sortOption.createdAt = sortOrder === "asc" ? 1 : -1;
         if (sortBy === "amount") sortOption.amount = sortOrder === "asc" ? 1 : -1;
