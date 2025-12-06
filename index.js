@@ -3,12 +3,21 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-
-
-const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+const app = express();
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://localhost:5173",
+      "http://localhost:5174",
+      "https://finease-968a4.web.app",
+     "https://cozy-sfogliatella-b1ff0b.netlify.app"
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json());
 console.log(process.env.DB_User, process.env.DB_Pass)
 
@@ -23,7 +32,6 @@ const client = new MongoClient(uri, {
 });
 async function run() {
   try {
-    await client.connect();
     db = client.db('FinEase');
     transactionsCollection = db.collection('transactions');
 
@@ -85,7 +93,7 @@ async function run() {
 
     // my transaction
 
-    app.get('/transactions/:email', async (req, res) => {
+    app.get('/my-transactions/:email', async (req, res) => {
       try {
         const email = req.params.email;
         const { sortBy = "date", sortOrder = "desc" } = req.query;
@@ -182,17 +190,7 @@ async function run() {
       }
     });
 
-    await client.db("FinEase").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  }
-  finally {
-  }
-}
-run().catch(console.dir);
-app.get('/', (req, res) => {
-  res.send('FinEase API Running ');
-});
-app.get("/reports", async (req, res) => {
+    app.get("/reports", async (req, res) => {
   try {
     const transactions = await transactionsCollection.find().toArray();
     const categoryDistribution = transactions.reduce((acc, item) => {
@@ -210,7 +208,7 @@ app.get("/reports", async (req, res) => {
     const monthlyTotals = transactions.reduce((acc, item) => {
       if (!item.createdAt) return acc;
 
-      const month = item.createdAt.toISOString().slice(0, 7); // YYYY-MM
+      const month = item.createdAt.toISOString().slice(0, 7); 
       const existing = acc.find((m) => m._id === month);
 
       if (existing) {
@@ -266,6 +264,18 @@ app.get("/summary", async (req, res) => {
     console.error(err);
     res.status(500).json({ message: "Summary fetch failed" });
   }
+});
+
+
+   // await client.db("FinEase").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  }
+  finally {
+  }
+}
+run().catch(console.dir);
+app.get('/', (req, res) => {
+  res.send('FinEase API Running ');
 });
 
 
