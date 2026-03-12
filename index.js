@@ -1,4 +1,3 @@
-
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
@@ -92,7 +91,6 @@ async function run() {
     });
 
     // my transaction
-
     app.get('/my-transactions/:email', async (req, res) => {
       try {
         const email = req.params.email;
@@ -116,30 +114,48 @@ async function run() {
       }
     });
 
-    app.get("/transactions/:id", async (req, res) => {
-      const id = req.params.id;
-      try {
-        const transaction = await db.collection("transactions").findOne({ _id: new ObjectId(id) });
 
-        if (!transaction) {
-          return res.status(404).send({ success: false, message: "Transaction not found" });
-        }
-        const totalCategoryAgg = await db.collection("transactions").aggregate([
-          { $match: { category: transaction.category } },
-          { $group: { _id: "$category", totalAmount: { $sum: "$amount" } } }
-        ]).toArray();
+app.get("/transactions/:id", async (req, res) => {
+  const id = req.params.id;
 
-        const totalAmountOfCategory = totalCategoryAgg[0]?.totalAmount || 0;
+  try {
+    const transaction = await db.collection("transactions").findOne({ _id: new ObjectId(id) });
 
-        res.send({
-          ...transaction,
-          totalAmountOfCategory
-        });
-      } catch (error) {
-        console.error(error);
-        res.status(500).send({ success: false, message: "Server Error" });
+    if (!transaction) {
+      return res.status(404).send({ success: false, message: "Transaction not found" });
+    }
+    const totalCategoryAgg = await db.collection("transactions").aggregate([
+      { 
+        $match: { 
+          category: transaction.category.trim(), 
+          email: transaction.email.trim() 
+        } 
+      },
+      { 
+        $group: { 
+          _id: null,
+          totalAmount: { 
+            $sum: { 
+              $toDouble: { $ifNull: ["$amount", 0] } 
+            } 
+          }
+        } 
       }
+    ]).toArray();
+
+    const totalAmountOfCategory = totalCategoryAgg[0]?.totalAmount || 0;
+    res.send({
+      ...transaction,
+      totalAmountOfCategory
     });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ success: false, message: "Server Error" });
+  }
+});
+
+  //update transaction
     app.put("/transactions/:id", async (req, res) => {
       const id = req.params.id;
       const updatedData = req.body;
@@ -163,15 +179,7 @@ async function run() {
       }
     });
 
-    app.get("/transactions/:id", async (req, res) => {
-      try {
-        const id = req.params.id;
-        const data = await transactionsCollection.findOne({ _id: new ObjectId(id) });
-        res.send(data);
-      } catch (err) {
-        res.status(500).send({ error: "Server error" });
-      }
-    });
+   
     app.delete("/my-transactions/:id", async (req, res) => {
       try {
         const id = req.params.id;
