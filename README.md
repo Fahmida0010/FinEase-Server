@@ -16,7 +16,7 @@ The platform provides secure authentication, private routes for personal financi
 
 # Live Links
 
-* **Live Website:** https://cozy-sfogliatella-b1ff0b.netlify.app
+* **Live Website:** https://b12-m11-session-aa418.web.app
 * **Client Repository:** https://github.com/Fahmida0010/FinEase-client.git
 * **Server Repository:** https://github.com/Fahmida0010/FinEase-Server.git
 
