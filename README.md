@@ -249,19 +249,6 @@ http://localhost:3000
 
 ---
 
-# Relevant Links
-
-**Live Site**
-https://cozy-sfogliatella-b1ff0b.netlify.app
-
-**Client Repository**
-https://github.com/Fahmida0010/FinEase-client
-
-**Server Repository**
-https://github.com/Fahmida0010/FinEase-Server
-
----
-
 # 🗄️ Database Example (MongoDB)
 
 ```json
